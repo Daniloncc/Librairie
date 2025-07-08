@@ -20,8 +20,8 @@ class UserController
 
     final public function show($data)
     {
-
-        if (isset($data['id']) && $data['id'] != null) {
+        print_r($_SESSION['userId']);
+        if (isset($data['id']) && $data['id'] != null && $_SESSION['userId'] == $data['id']) {
             $user = new User;
             $user = $user->selectId($data['id']);
 
@@ -37,13 +37,13 @@ class UserController
                 return View::render('error', ['message' => "Ce Client n'existe pas!"]);
             }
         } else {
-            return View::render('error', ['message' => '404 page non trouve!']);
+            return View::render('error', ['message' => 'Pas de hacker ici, :) !']);
         }
     }
 
     final public function edit($data)
     {
-        if (isset($data['id']) && $data['id'] != null) {
+        if (isset($data['id']) && $data['id'] != null && $_SESSION['userId'] == $data['id']) {
             $user = new User;
             $user = $user->selectId($data['id']);
 
@@ -61,7 +61,7 @@ class UserController
                 return View::render('error', ['message' => "Ce Client n'existe pas!"]);
             }
         } else {
-            return View::render('error', ['message' => '404 page non trouve!']);
+            return View::render('error', ['message' => 'Pas de hacker ici, :) !']);
         }
     }
 
@@ -119,7 +119,7 @@ class UserController
 
         // print_r($data);
         // die;
-        if (isset($get['id']) && $get['id'] != null && $get['id'] == $data['id']) {
+        if (isset($get['id']) && $get['id'] != null && $get['id'] == $data['id'] && $_SESSION['userId'] == $data['id']) {
 
             $validator = new Validator;
             $validator->field('nom', $data['nom'])->onlyLetters()->min(2)->max(45);
@@ -131,7 +131,7 @@ class UserController
 
             if ($validator->isSuccess()) {
 
-                // print_r($data);
+                print_r($_SESSION['userId']);
                 // die;
                 $user = new User;
                 $insertUser = $user->update($data, $data['id']);
@@ -164,10 +164,14 @@ class UserController
     final public function delete($data)
     {
 
-        $user = new User;
-        $delete = $user->delete($data['id']);
-        if ($delete) {
-            return View::redirect('auth/logout');
+        if ($_SESSION['userId'] == $data['id']) {
+            $user = new User;
+            $delete = $user->delete($data['id']);
+            if ($delete) {
+                return View::redirect('auth/logout');
+            } else {
+                return View::render('error', ['message' => 'Pas de hacker ici, :) !']);
+            }
         }
     }
 

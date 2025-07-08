@@ -1,7 +1,7 @@
 <?php
 // local
-define('BASE', '/03_session/TP_3/mvc');
-define('ASSET', '/03_session/TP_3/mvc/public');
+define('BASE', '/03_session/Projet_librairie/mvc');
+define('ASSET', '/03_session/Projet_librairie/mvc/public');
 
 
 // webdev
